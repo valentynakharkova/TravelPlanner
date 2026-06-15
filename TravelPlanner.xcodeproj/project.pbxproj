@@ -29,9 +29,33 @@
 		D04474702FE00B1D002E56E7 /* TravelPlannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelPlannerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D04474A22FE01C5B002E56E7 /* Exceptions for "TravelPlanner" folder in "TravelPlanner" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ViewModels/TripViewModel.swift,
+			);
+			target = D04474562FE00B1B002E56E7 /* TravelPlanner */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		D04474A32FE01C5B002E56E7 /* Exceptions for "TravelPlanner" folder in "Copy Bundle Resources" phase from "TravelPlanner" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = D04474552FE00B1B002E56E7 /* Resources */;
+			membershipExceptions = (
+				ViewModels/TripViewModel.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D04474592FE00B1B002E56E7 /* TravelPlanner */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D04474A22FE01C5B002E56E7 /* Exceptions for "TravelPlanner" folder in "TravelPlanner" target */,
+				D04474A32FE01C5B002E56E7 /* Exceptions for "TravelPlanner" folder in "Copy Bundle Resources" phase from "TravelPlanner" target */,
+			);
 			path = TravelPlanner;
 			sourceTree = "<group>";
 		};
