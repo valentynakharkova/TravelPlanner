@@ -18,6 +18,7 @@ class TripViewModel {
     //MARK: - Add Trp
     func addTrip(name: String, startDate: Date, endDate: Date) {
         let trip = Trip(name: name, startDate: startDate, endDate: endDate)
+        context.insert(trip)
         saveContext()
     }
     
@@ -34,9 +35,9 @@ class TripViewModel {
     }
     
     //MARK: - Add Stop
-    func addStop(to trip: Trip, name: String, country: String, latitude: Double, longitude: Double) {
+    func addStop(to trip: Trip, name: String, country: String, latitude: Double, longitude: Double, arrivalDate: Date? = nil, departureDate: Date? = nil) {
         let order = trip.stops.count
-        let stop = Stop(name: name, country: country, latitude: latitude, longitude: longitude, order: order, trip: trip)
+        let stop = Stop(name: name, country: country, latitude: latitude, longitude: longitude, arrivalDate: arrivalDate, departureDate: departureDate, order: order)
         stop.trip = trip
         trip.stops.append(stop)
         saveContext()
@@ -59,8 +60,9 @@ class TripViewModel {
     }
     
     //MARK: - Add Item
-    func addItem(to stop: Stop, name: String, type: ItemType, address: String, latitude: Double, longitude: Double) {
-        let item = TripItem(name: name, type: type, address: address, latitude: latitude, longitude: longitude, stop: stops)
+    func addItem(to stop: Stop, name: String, type: ItemType, address: String, latitude: Double, longitude: Double, photo: Data? = nil) {
+        let item = TripItem(name: name, type: type, address: address, latitude: latitude, longitude: longitude)
+        item.photo = photo
         item.stop = stop
         stop.items.append(item)
         saveContext()
