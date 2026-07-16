@@ -12,7 +12,7 @@ import SwiftData
 struct TravelPlannerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TripListView()
         }
         .modelContainer(for: [Trip.self, Stop.self, TripItem.self])
     }
