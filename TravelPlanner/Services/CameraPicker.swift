@@ -8,7 +8,9 @@
 import SwiftUI
 import UIKit
 
-
+/// SwiftUI wrapper around `UIImagePickerController` for capturing photos with the camera.
+/// UIKit's camera picker has no native SwiftUi equivalent, so this bridges it via
+/// `UIViewControllerRepresentable`
 struct CameraPicker: UIViewControllerRepresentable {
     
     @Binding var imageData: Data?
@@ -25,7 +27,7 @@ struct CameraPicker: UIViewControllerRepresentable {
         // Nothing to Update
     }
     
-    func makeCoordinator() -> Coordinator {
+    func makeCoordinator() -> Coordinator { 
         Coordinator(self)
     }
     
