@@ -11,8 +11,10 @@ import PhotosUI
 
 struct AddTripView: View {
     
+    let trip: Trip?
     let viewModel: TripViewModel
     
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
     @State private var name = ""
@@ -30,54 +32,35 @@ struct AddTripView: View {
                     DatePicker("Start date", selection: $startDate, displayedComponents: .date)
                     DatePicker("End date", selection: $endDate, in: startDate..., displayedComponents: .date)
                 }
-//                Section("Cover Photo") {
-//                    PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-//                        if let coverPhotoData, let uiImage = UIImage(data: coverPhotoData) {
-//                            Image(uiImage: uiImage)
-//                                .resizable()
-//                                .scaledToFill()
-//                                .frame(height: 150)
-//                                .frame(maxWidth: .infinity)
-//                                .clipShape(RoundedRectangle(cornerRadius: 12))
-//                        } else {
-//                            Label("Choose a cover photo", systemImage: "photo")
-//                        }
-//                    }
-//                    .onChange(of: selectedPhotoItem) { _, newValue in
-//                        loadPhoto(from: newValue)
-//                    }
-//                }
                 
-                Section("Cover Photo") {
+                Section("Add Photo") {
                     if let coverPhotoData, let uiImage = UIImage(data: coverPhotoData) {
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFill()
-                            .frame(height: 150)
+                            .frame(height: 300)
                             .frame(maxWidth: .infinity)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
-                    HStack {
-                        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                            Label("Choose Photo", systemImage: "photo.on.rectangle")
-                        }
-                        .onChange(of: selectedPhotoItem) { _, newValue in
-                            loadPhoto(from: newValue)
-                        }
-                        
-                        Spacer()
-                        
-                        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                            Button {
-                                showingCamera = true
-                            } label: {
-                                Label("Take Photo", systemImage: "photo")
-                            }
+                    
+                    PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                        Label("Choose Photo", systemImage: "photo.on.rectangle")
+                    }
+                    .onChange(of: selectedPhotoItem) { _, newValue in
+                        loadPhoto(from: newValue)
+                    }
+                    
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        Button {
+                            showingCamera = true
+                        } label: {
+                            Label("Take Photo", systemImage: "photo")
+
                         }
                     }
                 }
             }
-            .navigationTitle("New Trip")
+            .navigationTitle(trip == nil ? "New Trip" : "Edit Trip")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -87,7 +70,15 @@ struct AddTripView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        viewModel.addTrip(name: name, startDate: startDate, endDate: endDate)
+                        if let trip = trip {
+                            trip.name = name
+                            trip.startDate = startDate
+                            trip.endDate = endDate
+                            trip.coverPhoto = coverPhotoData
+                            try? modelContext.save()
+                        } else {
+                            viewModel.addTrip(name: name, startDate: startDate, endDate: endDate, coverPhoto: coverPhotoData)
+                        }
                         dismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
@@ -96,6 +87,14 @@ struct AddTripView: View {
             .fullScreenCover(isPresented: $showingCamera) {
                 CameraPicker(imageData: $coverPhotoData)
                     .ignoresSafeArea()
+            }
+            .onAppear {
+                if let trip = trip {
+                    name = trip.name
+                    startDate = trip.startDate
+                    endDate = trip.endDate
+                    coverPhotoData = trip.coverPhoto
+                }
             }
         }
     }
@@ -110,5 +109,5 @@ struct AddTripView: View {
 }
 
 #Preview {
-    AddTripView(viewModel: TripViewModel(context: ModelContext(try! ModelContainer(for: Trip.self))))
+    AddTripView(trip: nil, viewModel: TripViewModel(context: ModelContext(try! ModelContainer(for: Trip.self))))
 }
