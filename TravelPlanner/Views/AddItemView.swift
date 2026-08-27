@@ -7,7 +7,6 @@
 
 import SwiftData
 import SwiftUI
-import PhotosUI
 
 struct AddItemView: View {
 
@@ -21,9 +20,6 @@ struct AddItemView: View {
     @State private var address = ""
     @State private var latitude: Double?
     @State private var longitude: Double?
-    @State private var selectedPhotoItem: PhotosPickerItem?
-    @State private var photoData: Data?
-    @State private var showingCamera = false
 
     var body: some View {
         NavigationStack {
@@ -32,6 +28,7 @@ struct AddItemView: View {
                     LocationSearchView {
                         resolvedName,
                         resolvedAddress,
+                        resolvedCountry,
                         lat,
                         lon in
                         name = resolvedName
@@ -40,7 +37,7 @@ struct AddItemView: View {
                         longitude = lon
                     }
                 }
-                Section("Item Details") {
+                Section("Place Details") {
                     TextField("Name", text: $name)
                     TextField("Address", text: $address)
                     Picker("Type", selection: $type) {
@@ -61,55 +58,24 @@ struct AddItemView: View {
                         .foregroundStyle(.secondary)
                     }
                 }
-                    Section("Photos") {
-                            if let photoData, let uiImage = UIImage(data: photoData) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 150)
-                                    .frame(maxWidth: .infinity)
-                                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                            }
-                            HStack {
-                                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                                    Label("Choose Photo", systemImage: "photo.on.rectangle")
-                                }
-                                .onChange(of: selectedPhotoItem) { _, newValue in
-                                    loadPhoto(from: newValue)
-                                }
-                                Spacer()
-                                
-                                if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                                    Button {
-                                        showingCamera = true
-                                    } label: {
-                                        Label("Take Photo", systemImage: "camera")
-                                    }
-                                }
-                        }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("New Place")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
                     }
                 }
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationTitle("New Item")
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
-                            dismiss()
-                        }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        saveItem()
                     }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
-                            saveItem()
-                        }
-                        .disabled(!isValid)
-                    }
-                }
-                .fullScreenCover(isPresented: $showingCamera) {
-                    CameraPicker(imageData: $photoData)
-                        .ignoresSafeArea()
+                    .disabled(!isValid)
                 }
             }
         }
+    }
 
     private var isValid: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty
@@ -125,19 +91,9 @@ struct AddItemView: View {
             type: type,
             address: address,
             latitude: lat,
-            longitude: lon,
-            photo: photoData
+            longitude: lon
         )
         dismiss()
-    }
-    
-    private func loadPhoto(from item: PhotosPickerItem?) {
-        guard let item else { return }
-        Task {
-            if let data = try? await item.loadTransferable(type: Data.self) {
-                photoData = data
-            }
-        }
     }
 }
 
