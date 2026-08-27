@@ -14,6 +14,6 @@ struct TravelPlannerApp: App {
         WindowGroup {
             TripListView()
         }
-        .modelContainer(for: [Trip.self, Stop.self, TripItem.self])
+        .modelContainer(for: [Trip.self, Stop.self, TripItem.self, StopPhoto.self, TripPhoto.self])
     }
 }
