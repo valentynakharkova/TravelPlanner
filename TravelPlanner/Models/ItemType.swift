@@ -7,15 +7,16 @@
 
 import SwiftUI
 
-enum ItemType: String, CaseIterable, Codable {
-    case hotel, attraction, restaurant, other
+enum ItemType: String, Codable, CaseIterable, Identifiable {
+    var id: String { rawValue }
+    case hotel, museum, restaurant, other
     
     var label: String {
         switch self {
         case .hotel:
             "Hotel"
-        case .attraction:
-            "Attraction"
+        case .museum:
+            "Museum"
         case .restaurant:
             "Restaurant"
         case .other:
@@ -23,29 +24,46 @@ enum ItemType: String, CaseIterable, Codable {
         }
     }
     
-    var icon: Image {
+    var iconName: String {
         switch self {
         case .hotel:
-            Image(systemName: "bed.double.fill")
-        case .attraction:
-            Image(systemName: "star.fill")
+            "bed.double.fill"
+        case .museum:
+            "building.columns.fill"
         case .restaurant:
-            Image(systemName: "fork.knife")
+            "fork.knife"
         case .other:
-            Image(systemName: "mappin")
+            "mappin"
         }
+    }
+    
+    var icon: Image {
+        Image(systemName: iconName)
     }
     
     var color: Color {
         switch self {
         case .hotel:
                 .blue
-        case .attraction:
+        case .museum:
                 .orange
         case .restaurant:
                 .green
         case .other:
-                .gray
+                .indigo
+        }
+    }
+    
+    var sortOrder: Int {
+        switch self {
+        case .hotel:
+            1
+        case .museum:
+            2
+        case .restaurant:
+            3
+        case .other:
+            4
         }
     }
 }
