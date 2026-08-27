@@ -22,6 +22,9 @@ class Stop {
     @Relationship(deleteRule: .cascade, inverse: \TripItem.stop)
     var items: [TripItem]
     
+    @Relationship(deleteRule: .cascade, inverse: \StopPhoto.stop)
+    var stopPhoto: [StopPhoto]
+    
     init(name: String, country: String, latitude: Double, longitude: Double, arrivalDate: Date? = nil, departureDate: Date? = nil, order: Int = 0) {
         self.name = name
         self.country = country
@@ -32,5 +35,6 @@ class Stop {
         self.order = order
         self.trip = nil
         self.items = []
+        self.stopPhoto = []
     }
 }
