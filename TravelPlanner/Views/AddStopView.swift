@@ -7,10 +7,12 @@
 
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct AddStopView: View {
 
     let trip: Trip
+    let stop: Stop?
     let viewModel: TripViewModel
 
     @Environment(\.dismiss) private var dismiss
@@ -22,13 +24,18 @@ struct AddStopView: View {
     @State private var arrivalDate = Date.now
     @State private var departureDate = Date.now.addingTimeInterval(86400)
     @State private var hasDates = false
+    @State private var selectedPhotoItem: PhotosPickerItem?
+    @State private var coverPhotoData: Data?
+    @State private var showingCamera = false
+
 
     var body: some View {
         NavigationStack {
             Form {
                 Section("Search Location") {
-                    LocationSearchView { resolvedName, address, lat, lon in
+                    LocationSearchView { resolvedName, address, resolvedCountry, lat, lon in
                         name = resolvedName
+                        country = resolvedCountry
                         latitude = lat
                         longitude = lon
                     }
@@ -51,9 +58,34 @@ struct AddStopView: View {
                         DatePicker("Departure", selection: $departureDate, in: arrivalDate..., displayedComponents: .date)
                     }
                 }
+                Section("Add Photo") {
+                    if let coverPhotoData, let uiImage = UIImage(data: coverPhotoData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 300)
+                            .frame(maxWidth: .infinity)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                    PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                        Label("Choose Photo", systemImage: "photo.on.rectangle")
+                    }
+                    .onChange(of: selectedPhotoItem) { _, newValue in
+                        loadPhoto(from: newValue)
+                    }
+                    
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        Button {
+                            showingCamera = true
+                        } label: {
+                            Label("Take Photo", systemImage: "photo")
+                        }
+                    }
+                }
             }
             .environment(\.locale, Locale(identifier: "en_UK"))
-            .navigationTitle("New Stop")
+            .navigationTitle(stop == nil ? "New Stop" : "Edit Stop")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -67,6 +99,26 @@ struct AddStopView: View {
                     .disabled(!isValid)
                 }
             }
+            .onAppear {
+                if let stop = stop {
+                    name = stop.name
+                    country = stop.country
+                    latitude = stop.latitude
+                    longitude = stop.longitude
+                    
+                    if let arrival = stop.arrivalDate, let departure = stop.departureDate {
+                        hasDates = true
+                        arrivalDate = arrival
+                        departureDate = departure
+                    } else {
+                        hasDates = false
+                    }
+                    
+                    if let firstPhoto = stop.stopPhoto.sorted(by: {$0.order < $1.order}).first {
+                        coverPhotoData = firstPhoto.photoData
+                    }
+                }
+            }
         }
     }
     private var isValid: Bool {
@@ -77,16 +129,38 @@ struct AddStopView: View {
     }
     private func saveStop() {
         guard let lat = latitude, let lon = longitude else { return }
-        viewModel.addStop(
-            to: trip,
-            name: name,
-            country: country,
-            latitude: lat,
-            longitude: lon,
-            arrivalDate: hasDates ? arrivalDate : nil,
-            departureDate: hasDates ? departureDate : nil
-        )
+        if let stop {
+            stop.name = name
+            stop.country = country
+            stop.latitude = lat
+            stop.longitude = lon
+            stop.arrivalDate = hasDates ? arrivalDate : nil
+            stop.departureDate = hasDates ? departureDate : nil
+            if let coverPhotoData {
+                viewModel.addStopPhotos(coverPhotoData, to: stop)
+            }
+            viewModel.saveContext()
+        } else {
+            viewModel.addStop(
+                to: trip,
+                name: name,
+                country: country,
+                latitude: lat,
+                longitude: lon,
+                arrivalDate: hasDates ? arrivalDate : nil,
+                departureDate: hasDates ? departureDate : nil
+            )
+        }
+        
         dismiss()
+    }
+    private func loadPhoto(from item: PhotosPickerItem?) {
+        guard let item else { return }
+        Task {
+            if let data = try? await item.loadTransferable(type: Data.self) {
+                coverPhotoData = data
+            }
+        }
     }
 }
 
@@ -97,6 +171,7 @@ struct AddStopView: View {
             startDate: .now,
             endDate: .now.addingTimeInterval(86400 * 7)
         ),
+        stop: nil,
         viewModel: TripViewModel(context: ModelContext(try! ModelContainer(for: Trip.self)))
     )
 }
