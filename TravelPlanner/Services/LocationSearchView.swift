@@ -14,7 +14,7 @@ struct LocationSearchView: View {
     @State private var searchLocation = LocationSearchService()
     @State private var isSearching = false
     
-    let onSelect: (String, String, Double, Double) -> Void
+    let onSelect: (String, String, String, Double, Double) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -59,7 +59,7 @@ struct LocationSearchView: View {
     private func selectSuggestion(_ suggestion: MKLocalSearchCompletion) {
         Task {
             if let result = await searchLocation.resolveLocation(for: suggestion) {
-                onSelect(result.name, result.address, result.latitude, result.longitude)
+                onSelect(result.name, result.address, result.country, result.latitude, result.longitude)
                 searchText = result.name
                 isSearching = false
             }
@@ -69,7 +69,7 @@ struct LocationSearchView: View {
 }
 
 #Preview {
-    LocationSearchView { name, address, latitude, longitude in
-        print("Selected location: \(name), \(address), \(latitude), \(longitude)")
+    LocationSearchView { name, address, country, latitude, longitude in
+        print("Selected location: \(name), \(address), \(country), \(latitude), \(longitude)")
     }
 }
