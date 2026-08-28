@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D04474572FE00B1B002E56E7 /* TravelPlanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D04474662FE00B1D002E56E7 /* TravelPlannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelPlannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D04474702FE00B1D002E56E7 /* TravelPlannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelPlannerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D06C7E403021F032001D435B /* TravelPlanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D06C7E413021F032001D435B /* TravelPlannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelPlannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D06C7E423021F032001D435B /* TravelPlannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelPlannerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,18 +78,10 @@
 				D04474592FE00B1B002E56E7 /* TravelPlanner */,
 				D04474692FE00B1D002E56E7 /* TravelPlannerTests */,
 				D04474732FE00B1D002E56E7 /* TravelPlannerUITests */,
-				D04474582FE00B1B002E56E7 /* Products */,
+				D06C7E403021F032001D435B /* TravelPlanner.app */,
+				D06C7E413021F032001D435B /* TravelPlannerTests.xctest */,
+				D06C7E423021F032001D435B /* TravelPlannerUITests.xctest */,
 			);
-			sourceTree = "<group>";
-		};
-		D04474582FE00B1B002E56E7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				D04474572FE00B1B002E56E7 /* TravelPlanner.app */,
-				D04474662FE00B1D002E56E7 /* TravelPlannerTests.xctest */,
-				D04474702FE00B1D002E56E7 /* TravelPlannerUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -114,7 +106,7 @@
 			packageProductDependencies = (
 			);
 			productName = TravelPlanner;
-			productReference = D04474572FE00B1B002E56E7 /* TravelPlanner.app */;
+			productReference = D06C7E403021F032001D435B /* TravelPlanner.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D04474652FE00B1D002E56E7 /* TravelPlannerTests */ = {
@@ -137,7 +129,7 @@
 			packageProductDependencies = (
 			);
 			productName = TravelPlannerTests;
-			productReference = D04474662FE00B1D002E56E7 /* TravelPlannerTests.xctest */;
+			productReference = D06C7E413021F032001D435B /* TravelPlannerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		D044746F2FE00B1D002E56E7 /* TravelPlannerUITests */ = {
@@ -160,7 +152,7 @@
 			packageProductDependencies = (
 			);
 			productName = TravelPlannerUITests;
-			productReference = D04474702FE00B1D002E56E7 /* TravelPlannerUITests.xctest */;
+			productReference = D06C7E423021F032001D435B /* TravelPlannerUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -171,7 +163,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2650;
-				LastUpgradeCheck = 2650;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					D04474562FE00B1B002E56E7 = {
 						CreatedOnToolsVersion = 26.5;
@@ -196,7 +188,7 @@
 			mainGroup = D044744E2FE00B1B002E56E7;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = D04474582FE00B1B002E56E7 /* Products */;
+			productRefGroup = D044744E2FE00B1B002E56E7;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -328,6 +320,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -385,6 +378,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -400,11 +394,15 @@
 				DEVELOPMENT_TEAM = 36S6RZ78BM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TravelPlanner can add your trips to your calendar";
+				INFOPLIST_KEY_NSCameraUsageDescription = "TravelPlanner needs camera access to let you take photos for your trips";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "TravelPlanner uses your location to show nearby places when searching";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -432,11 +430,15 @@
 				DEVELOPMENT_TEAM = 36S6RZ78BM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TravelPlanner can add your trips to your calendar";
+				INFOPLIST_KEY_NSCameraUsageDescription = "TravelPlanner needs camera access to let you take photos for your trips";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "TravelPlanner uses your location to show nearby places when searching";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
