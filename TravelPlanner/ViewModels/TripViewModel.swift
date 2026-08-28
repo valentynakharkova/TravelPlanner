@@ -90,12 +90,14 @@ class TripViewModel {
     /// - longitude: Displays longitude coordinate of the stop;
     /// - arrivalDate: Optional that displays arrival date of the stop;
     /// - departureDate: Optional that displays departure date of the stop.
-    func addStop(to trip: Trip, name: String, country: String, latitude: Double, longitude: Double, arrivalDate: Date? = nil, departureDate: Date? = nil) {
+    @discardableResult
+    func addStop(to trip: Trip, name: String, country: String, latitude: Double, longitude: Double, arrivalDate: Date? = nil, departureDate: Date? = nil) -> Stop {
         let order = trip.stops.count
         let stop = Stop(name: name, country: country, latitude: latitude, longitude: longitude, arrivalDate: arrivalDate, departureDate: departureDate, order: order)
         stop.trip = trip
         trip.stops.append(stop)
         saveContext()
+        return stop
     }
     
     //MARK: - Delete Stop

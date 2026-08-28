@@ -141,7 +141,7 @@ struct AddStopView: View {
             }
             viewModel.saveContext()
         } else {
-            viewModel.addStop(
+            let newStop = viewModel.addStop(
                 to: trip,
                 name: name,
                 country: country,
@@ -150,6 +150,9 @@ struct AddStopView: View {
                 arrivalDate: hasDates ? arrivalDate : nil,
                 departureDate: hasDates ? departureDate : nil
             )
+            if let coverPhotoData {
+                viewModel.addStopPhotos(coverPhotoData, to: newStop)
+            }
         }
         
         dismiss()
